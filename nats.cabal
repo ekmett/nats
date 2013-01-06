@@ -1,0 +1,42 @@
+name:          nats
+category:      Numeric, Algebra
+version:       0.1
+license:       BSD3
+cabal-version: >= 1.10
+license-file:  LICENSE
+author:        Edward A. Kmett
+maintainer:    Edward A. Kmett <ekmett@gmail.com>
+stability:     provisional
+homepage:      http://github.com/ekmett/nats/
+bug-reports:   http://github.com/ekmett/nats/issues
+copyright:     Copyright (C) 2011 Edward A. Kmett
+synopsis:      Haskell 98 natural numbers
+description:
+    Haskell 98 natural numbers
+build-type:    Simple
+extra-source-files:
+  .ghci
+  .gitignore
+  .vim.custom
+  .travis.yml
+  README.markdown
+  CHANGELOG.markdown
+
+source-repository head
+  type: git
+  location: git://github.com/ekmett/nats.git
+
+library
+  default-language: Haskell98
+  hs-source-dirs: src
+
+  if !impl(hugs)
+    other-extensions: DeriveDataTypeable
+    cpp-options: -DLANGUAGE_DeriveDataTypeable
+
+  build-depends: base >= 2 && < 10
+  ghc-options: -Wall
+
+  exposed-modules:
+    Numeric.Natural
+    Numeric.Natural.Internal
