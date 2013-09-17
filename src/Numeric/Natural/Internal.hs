@@ -42,6 +42,7 @@ newtype Natural = Natural { runNatural :: Integer } deriving
 #endif
   )
 
+-- | Church decoding
 natural :: a -> (a -> a) -> Natural -> a
 natural a _ 0 = a
 natural a f n = natural (f a) f (unsafePred n)

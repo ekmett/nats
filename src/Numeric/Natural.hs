@@ -14,6 +14,7 @@
 module Numeric.Natural
   ( Natural
   , Whole(toNatural)
+  , natural
   ) where
 
 import Numeric.Natural.Internal
