@@ -23,6 +23,7 @@
 module Numeric.Natural.Internal
   ( Natural(..)
   , Whole(..)
+  , natural
   ) where
 
 import Data.Word
@@ -40,6 +41,11 @@ newtype Natural = Natural { runNatural :: Integer } deriving
   , Typeable
 #endif
   )
+
+natural :: a -> (a -> a) -> Natural -> a
+natural a _ 0 = a
+natural a f n = natural (f a) f (unsafePred n)
+{-# INLINEABLE natural #-}
 
 instance Show Natural where
   showsPrec d (Natural n) = showsPrec d n
