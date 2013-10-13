@@ -96,6 +96,10 @@ instance Bits Natural where
   testBit = testBit . runNatural
   {-# INLINE testBit #-}
   bitSize = bitSize . runNatural
+#if MIN_VERSION_base(4,7,0)
+  bitSizeMaybe = bitSizeMaybe . runNatural
+  {-# INLINE bitSizeMaybe #-}
+#endif
   {-# INLINE bitSize #-}
   isSigned _ = False
   {-# INLINE isSigned #-}
