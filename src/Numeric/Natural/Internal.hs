@@ -9,7 +9,7 @@
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Numeric.Natural.Internal
--- Copyright   :  (C) 2011 Edward Kmett,
+-- Copyright   :  (C) 2011-2014 Edward Kmett,
 -- License     :  BSD-style (see the file LICENSE)
 --
 -- Maintainer  :  Edward Kmett <ekmett@gmail.com>
@@ -95,7 +95,11 @@ instance Bits Natural where
   {-# INLINE complementBit #-}
   testBit = testBit . runNatural
   {-# INLINE testBit #-}
-  bitSize = bitSize . runNatural
+#if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 707
+  bitSizeMaybe _ = Nothing
+  {-# INLINE bitSizeMaybe #-}
+#endif
+  bitSize = error "Natural: bitSize"
   {-# INLINE bitSize #-}
   isSigned _ = False
   {-# INLINE isSigned #-}
