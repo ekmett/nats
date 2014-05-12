@@ -6,11 +6,11 @@ env:
  # we have to use CABALVER=1.16 for GHC<7.6 as well, as there's
  # no package for earlier cabal versions in the PPA
  - GHCVER=7.4.2 CABALVER=1.16
- - GHCVER=7.6.3 CABALVER=1.16 OPTS="--constraint='hashable >= 1.2'"
- - GHCVER=7.6.3 CABALVER=1.16 OPTS="--constraint='hashable < 1.2'"
+ - GHCVER=7.6.3 CABALVER=1.16 OPTS="--constraint=hashable>=1.2"
+ - GHCVER=7.6.3 CABALVER=1.16 OPTS="--constraint=hashable<1.2"
  - GHCVER=7.6.3 CABALVER=1.16 OPTS=-f-hashable
- - GHCVER=7.8.2 CABALVER=1.18 OPTS="--constraint='hashable >= 1.2'"
- - GHCVER=7.8.2 CABALVER=1.18 OPTS="--constraint='hashable < 1.2'"
+ - GHCVER=7.8.2 CABALVER=1.18 OPTS="--constraint=hashable>=1.2"
+ - GHCVER=7.8.2 CABALVER=1.18 OPTS="--constraint=hashable<1.2"
  - GHCVER=7.8.2 CABALVER=1.18 OPTS=-f-hashable
  # NOTE: we can't use Cabal 1.20 yet due to
  #  https://github.com/haskell/cabal/issues/1806
@@ -38,7 +38,7 @@ install:
 # build to fail.
 script:
  # -v2 provides useful information for debugging
- - cabal configure -v2 $OPTS
+ - cabal configure -v2 "$OPTS"
 
  # this builds all libraries and executables
  # (including tests/benchmarks)
