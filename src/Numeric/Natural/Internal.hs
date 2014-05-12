@@ -1,11 +1,22 @@
 {-# LANGUAGE CPP #-}
-#ifdef LANGUAGE_DeriveDataTypeable
+
+#ifdef __GLASGOW_HASKELL__
+#define LANGUAGE_DeriveDataTypeable
 {-# LANGUAGE DeriveDataTypeable #-}
 #endif
 
 #ifndef MIN_VERSION_base
 #define MIN_VERSION_base(x,y,z) 1
 #endif
+
+#if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 702
+#ifdef MIN_VERSION_hashable
+{-# LANGUAGE Trustworthy #-}
+#else
+{-# LANGUAGE Safe #-}
+#endif
+#endif
+
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Numeric.Natural.Internal
@@ -30,7 +41,10 @@ import Data.Word
 import Data.Bits
 import Data.Ix
 #ifdef LANGUAGE_DeriveDataTypeable
-import Data.Typeable
+import Data.Data
+#endif
+#ifdef MIN_VERSION_hashable
+import Data.Hashable
 #endif
 
 newtype Natural = Natural { runNatural :: Integer } deriving
@@ -41,6 +55,31 @@ newtype Natural = Natural { runNatural :: Integer } deriving
   , Typeable
 #endif
   )
+
+#ifdef MIN_VERSION_hashable
+instance Hashable Natural where
+#if MIN_VERSION_hashable(1,2,0)
+  hashWithSalt p (Natural a) = hashWithSalt p a
+#else
+  hash (Natural a) = hash a
+#endif
+#endif
+
+#ifdef LANGUAGE_DeriveDataTypeable
+instance Data Natural where
+  gfoldl f z (Natural n) = z fromInteger `f` n
+  gunfold k z c = case constrIndex c of
+    1 -> k (z fromInteger)
+    _ -> error "Natural: gunfold: bad constructor"
+  toConstr _     = fromIntegerConstr
+  dataTypeOf _   = naturalDataType
+
+fromIntegerConstr :: Constr
+fromIntegerConstr = mkConstr naturalDataType "fromInteger" [] Prefix
+
+naturalDataType :: DataType
+naturalDataType = mkDataType "Numeric.Natural.Internal.Natural" [fromIntegerConstr]
+#endif
 
 -- | Church decoding
 natural :: a -> (a -> a) -> Natural -> a
