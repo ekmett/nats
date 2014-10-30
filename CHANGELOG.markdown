@@ -1,3 +1,7 @@
+0.2.1
+-----
+* Better `readsPrec` handling when you try to feed it a negative number. Not it is a failed parse rather than an error.
+
 0.2
 ---
 * Added `Hashable` and `Data` support.
