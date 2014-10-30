@@ -91,7 +91,7 @@ instance Show Natural where
   showsPrec d (Natural n) = showsPrec d n
 
 instance Read Natural where
-  readsPrec d = map (\(n, s) -> (Natural n, s)) . readsPrec d
+  readsPrec d = map (\(n, s) -> (Natural n, s)) . filter ((>= 0) . fst) . readsPrec d
 
 instance Num Natural where
   Natural n + Natural m = Natural (n + m)
