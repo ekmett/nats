@@ -1,3 +1,7 @@
+1.0
+---
+* Make `nats` a compat-package since `Numeric.Natural` moved to `base-4.8.0.0`.
+
 0.2.1
 -----
 * Better `readsPrec` handling when you try to feed it a negative number. Not it is a failed parse rather than an error.
