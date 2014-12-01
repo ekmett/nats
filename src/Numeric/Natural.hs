@@ -29,9 +29,12 @@
 --
 -- Natural numbers.
 --
+-- The "Numeric.Natural" module has become part of `base` starting
+-- with `base-4.8.0.0`.
 ----------------------------------------------------------------------------
 module Numeric.Natural ( Natural ) where
 
+import Control.Exception ( throw, ArithException(Underflow) )
 import Data.Bits
 import Data.Ix
 #ifdef LANGUAGE_DeriveDataTypeable
@@ -41,6 +44,13 @@ import Data.Data
 import Data.Hashable
 #endif
 
+-- | Type representing arbitrary-precision non-negative integers.
+--
+-- Operations whose result would be negative
+-- @'throw' ('Underflow' :: 'ArithException')@.
+--
+-- The 'Natural' type has become part of `base` starting with
+-- `base-4.8.0.0`.
 newtype Natural = Natural { runNatural :: Integer } deriving
   ( Eq
   , Ord
@@ -86,7 +96,7 @@ instance Num Natural where
   {-# INLINE (+) #-}
   Natural n * Natural m = Natural (n * m)
   {-# INLINE (*) #-}
-  Natural n - Natural m | result < 0 = error "Natural.(-): negative result"
+  Natural n - Natural m | result < 0 = throw Underflow
                         | otherwise  = Natural result
     where result = n - m
   {-# INLINE (-) #-}
@@ -96,7 +106,7 @@ instance Num Natural where
   {-# INLINE signum #-}
   fromInteger n
     | n >= 0 = Natural n
-    | otherwise = error "Natural.fromInteger: negative"
+    | otherwise = throw Underflow
   {-# INLINE fromInteger #-}
 
 instance Bits Natural where
@@ -148,7 +158,7 @@ instance Real Natural where
   {-# INLINE toRational #-}
 
 instance Enum Natural where
-  pred (Natural 0) = error "Natural.pred: 0"
+  pred (Natural 0) = throw Underflow
   pred (Natural n) = Natural (pred n)
   {-# INLINE pred #-}
   succ (Natural n) = Natural (succ n)
