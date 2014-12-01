@@ -169,6 +169,29 @@ instance Enum Natural where
            | otherwise = Natural (toEnum n)
   {-# INLINE toEnum #-}
 
+  enumFrom = map Natural . enumFrom . runNatural
+
+  enumFromThen x y
+    | x <= y    = map Natural (enumFromThen   (runNatural x) (runNatural y))
+    | otherwise = map Natural (enumFromThenTo (runNatural x) (runNatural y) 0)
+
+  enumFromTo x y = map Natural (enumFromTo (runNatural x) (runNatural y))
+
+  enumFromThenTo x x1 y
+    = map Natural (enumFromThenTo (runNatural x) (runNatural x1) (runNatural y))
+
+{- NOTE: Using "Data.Coerce", we could instead say:
+
+  enumFrom      = coerce (enumFrom     :: Integer -> [Integer])
+  enumFromThen x y
+    | x <= y    = coerce (enumFromThen :: Integer -> Integer -> [Integer]) x y
+    | otherwise = enumFromThenTo x y 0
+
+  enumFromTo    = coerce (enumFromTo   :: Integer -> Integer -> [Integer])
+  enumFromThenTo
+    = coerce (enumFromThenTo :: Integer -> Integer -> Integer -> [Integer])
+-}
+
 instance Integral Natural where
   quot (Natural a) (Natural b) = Natural (quot a b)
   {-# INLINE quot #-}
