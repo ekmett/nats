@@ -1,7 +1,8 @@
 nats
 ====
 
-[![Build Status](https://secure.travis-ci.org/ekmett/nats.png?branch=master)](http://travis-ci.org/ekmett/nats)
+[![Hackage](https://img.shields.io/hackage/v/nats.svg)](https://hackage.haskell.org/package/nats)
+[![Build Status](https://secure.travis-ci.org/ekmett/nats.svg?branch=master)](http://travis-ci.org/ekmett/nats)
 
 Haskell 98 natural numbers
 
