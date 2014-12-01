@@ -32,7 +32,6 @@
 ----------------------------------------------------------------------------
 module Numeric.Natural ( Natural ) where
 
-import Data.Word
 import Data.Bits
 import Data.Ix
 #ifdef LANGUAGE_DeriveDataTypeable
@@ -175,44 +174,3 @@ instance Integral Natural where
   {-# INLINE quotRem #-}
   toInteger = runNatural
   {-# INLINE toInteger #-}
-
--- | A refinement of 'Integral' to represent types that do not contain negative numbers.
-class Integral n => Whole n where
-  toNatural :: n -> Natural
-  unsafePred :: n -> n
-
-instance Whole Word where
-  toNatural = Natural . toInteger
-  unsafePred n = n - 1
-  {-# INLINE toNatural #-}
-  {-# INLINE unsafePred #-}
-
-instance Whole Word8 where
-  toNatural = Natural . toInteger
-  unsafePred n = n - 1
-  {-# INLINE toNatural #-}
-  {-# INLINE unsafePred #-}
-
-instance Whole Word16 where
-  toNatural = Natural . toInteger
-  unsafePred n = n - 1
-  {-# INLINE toNatural #-}
-  {-# INLINE unsafePred #-}
-
-instance Whole Word32 where
-  toNatural = Natural . toInteger
-  unsafePred n = n - 1
-  {-# INLINE toNatural #-}
-  {-# INLINE unsafePred #-}
-
-instance Whole Word64 where
-  toNatural = Natural . toInteger
-  unsafePred n = n - 1
-  {-# INLINE toNatural #-}
-  {-# INLINE unsafePred #-}
-
-instance Whole Natural where
-  toNatural = id
-  unsafePred (Natural n) = Natural (n - 1)
-  {-# INLINE toNatural #-}
-  {-# INLINE unsafePred #-}
