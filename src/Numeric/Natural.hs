@@ -70,19 +70,18 @@ instance Hashable Natural where
 #endif
 
 #ifdef LANGUAGE_DeriveDataTypeable
+-- This follows the same style as the other integral 'Data' instances
+-- defined in "Data.Data"
+naturalType :: DataType
+naturalType = mkIntType "Numeric.Natural.Natural"
+
 instance Data Natural where
-  gfoldl f z (Natural n) = z fromInteger `f` n
-  gunfold k z c = case constrIndex c of
-    1 -> k (z fromInteger)
-    _ -> error "Natural: gunfold: bad constructor"
-  toConstr _     = fromIntegerConstr
-  dataTypeOf _   = naturalDataType
-
-fromIntegerConstr :: Constr
-fromIntegerConstr = mkConstr naturalDataType "fromInteger" [] Prefix
-
-naturalDataType :: DataType
-naturalDataType = mkDataType "Numeric.Natural.Internal.Natural" [fromIntegerConstr]
+  toConstr x = mkIntegralConstr naturalType x
+  gunfold _ z c = case constrRep c of
+                    (IntConstr x) -> z (fromIntegral x)
+                    _ -> error $ "Data.Data.gunfold: Constructor " ++ show c
+                                 ++ " is not of type Natural"
+  dataTypeOf _ = naturalType
 #endif
 
 instance Show Natural where
