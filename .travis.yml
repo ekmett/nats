@@ -9,16 +9,16 @@ env:
  - GHCVER=7.6.3 CABALVER=1.16 OPTS="--constraint=hashable>=1.2"
  - GHCVER=7.6.3 CABALVER=1.16 OPTS="--constraint=hashable<1.2"
  - GHCVER=7.6.3 CABALVER=1.16 OPTS=-f-hashable
- - GHCVER=7.8.2 CABALVER=1.18 OPTS="--constraint=hashable>=1.2"
- - GHCVER=7.8.2 CABALVER=1.18 OPTS="--constraint=hashable<1.2"
- - GHCVER=7.8.2 CABALVER=1.18 OPTS=-f-hashable
+ - GHCVER=7.8.3 CABALVER=1.18 OPTS="--constraint=hashable>=1.2"
+ - GHCVER=7.8.3 CABALVER=1.18 OPTS="--constraint=hashable<1.2"
+ - GHCVER=7.8.3 CABALVER=1.18 OPTS=-f-hashable
  # NOTE: we can't use Cabal 1.20 yet due to
  #  https://github.com/haskell/cabal/issues/1806
- - GHCVER=head  CABALVER=1.20
+ - GHCVER=head  CABALVER=head
 
 matrix:
   allow_failures:
-   - env: GHCVER=head  CABALVER=1.20
+   - env: GHCVER=head  CABALVER=head
 
 # Note: the distinction between `before_install` and `install` is not
 #       important.
@@ -28,6 +28,7 @@ before_install:
  - travis_retry sudo apt-get install cabal-install-$CABALVER ghc-$GHCVER
  - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
  - cabal --version
+ - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
 
 install:
  - travis_retry cabal update
