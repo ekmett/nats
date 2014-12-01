@@ -37,6 +37,9 @@ flag hashable
 
 library
   default-language: Haskell98
+  if impl(ghc<7)
+    -- {-# LANGUAGE DeriveDataTypeable #-} is only understood starting w/ GHC-7.0
+    default-extensions: DeriveDataTypeable
 
   if !impl(ghc>=7.9)
     -- Starting with GHC 7.10/base-4.8, "Numeric.Natural" lives in `base`
