@@ -43,6 +43,9 @@ import Data.Data
 #ifdef MIN_VERSION_hashable
 import Data.Hashable
 #endif
+#if MIN_VERSION_base(4,7,0) && !(MIN_VERSION_base(4,8,0))
+import Text.Printf (PrintfArg(..), formatInteger)
+#endif
 
 -- | Type representing arbitrary-precision non-negative integers.
 --
@@ -206,3 +209,9 @@ instance Integral Natural where
   {-# INLINE quotRem #-}
   toInteger = runNatural
   {-# INLINE toInteger #-}
+
+#if MIN_VERSION_base(4,7,0) && !(MIN_VERSION_base(4,8,0))
+instance PrintfArg Natural where
+  formatArg     = formatInteger . toInteger
+  parseFormat _ = parseFormat (undefined :: Integer)
+#endif
