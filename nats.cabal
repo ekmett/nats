@@ -46,6 +46,7 @@ library
     hs-source-dirs: src
     exposed-modules: Numeric.Natural
     ghc-options: -Wall
-    build-depends: base >= 2
+    # the needlessly relaxed bound here is to due to stack shenanigans
+    build-depends: base >= 2 && base < 5
     if flag(hashable)
       build-depends: hashable >= 1.1 && < 1.3
