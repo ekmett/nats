@@ -46,6 +46,6 @@ library
     hs-source-dirs: src
     exposed-modules: Numeric.Natural
     ghc-options: -Wall
-    build-depends: base >= 2 && < 4.8
+    build-depends: base >= 2
     if flag(hashable)
       build-depends: hashable >= 1.1 && < 1.3
