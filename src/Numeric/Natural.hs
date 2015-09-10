@@ -35,6 +35,8 @@
 module Numeric.Natural ( Natural ) where
 
 import Control.Exception ( throw, ArithException(Underflow) )
+import Control.Monad (liftM)
+import Data.Binary (Binary(..), Get, Word8, Word64, putWord8)
 import Data.Bits
 import Data.Ix
 #ifdef LANGUAGE_DeriveDataTypeable
@@ -43,6 +45,7 @@ import Data.Data
 #ifdef MIN_VERSION_hashable
 import Data.Hashable
 #endif
+import Data.List (unfoldr)
 #if MIN_VERSION_base(4,7,0) && !(MIN_VERSION_base(4,8,0))
 import Text.Printf (PrintfArg(..), formatInteger)
 #endif
@@ -215,3 +218,40 @@ instance PrintfArg Natural where
   formatArg     = formatInteger . toInteger
   parseFormat _ = parseFormat (undefined :: Integer)
 #endif
+
+--
+-- Fold and unfold an Integer to and from a list of its bytes
+--
+unroll :: (Integral a, Num a, Bits a) => a -> [Word8]
+unroll = unfoldr step
+  where
+    step 0 = Nothing
+    step i = Just (fromIntegral i, i `shiftR` 8)
+
+roll :: (Integral a, Num a, Bits a) => [Word8] -> a
+roll   = foldr unstep 0
+  where
+    unstep b a = a `shiftL` 8 .|. fromIntegral b
+
+-- Fixed-size type for a subset of Natural
+type NaturalWord = Word64
+
+instance Binary Natural where
+    {-# INLINE put #-}
+    put n | n <= hi = do
+        putWord8 0
+        put (fromIntegral n :: NaturalWord)  -- fast path
+     where
+        hi = fromIntegral (maxBound :: NaturalWord) :: Natural
+
+    put n = do
+        putWord8 1
+        put (unroll (abs n))         -- unroll the bytes
+
+    {-# INLINE get #-}
+    get = do
+        tag <- get :: Get Word8
+        case tag of
+            0 -> liftM fromIntegral (get :: Get NaturalWord)
+            _ -> do bytes <- get
+                    return $! roll bytes
