@@ -10,11 +10,7 @@
 #endif
 
 #if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 702
-#ifdef MIN_VERSION_hashable
 {-# LANGUAGE Trustworthy #-}
-#else
-{-# LANGUAGE Safe #-}
-#endif
 #endif
 
 -----------------------------------------------------------------------------
