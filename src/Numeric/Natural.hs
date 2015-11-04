@@ -10,11 +10,7 @@
 #endif
 
 #if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 702
-#ifdef MIN_VERSION_hashable
 {-# LANGUAGE Trustworthy #-}
-#else
-{-# LANGUAGE Safe #-}
-#endif
 #endif
 
 -----------------------------------------------------------------------------
@@ -46,6 +42,7 @@ import Data.Data
 import Data.Hashable
 #endif
 import Data.List (unfoldr)
+import Language.Haskell.TH.Syntax (Lift(..), Exp(LitE), Lit(IntegerL))
 #if MIN_VERSION_base(4,7,0) && !(MIN_VERSION_base(4,8,0))
 import Text.Printf (PrintfArg(..), formatInteger)
 #endif
@@ -255,3 +252,6 @@ instance Binary Natural where
             0 -> liftM fromIntegral (get :: Get NaturalWord)
             _ -> do bytes <- get
                     return $! roll bytes
+
+instance Lift Natural where
+    lift x = return (LitE (IntegerL (fromIntegral x)))
