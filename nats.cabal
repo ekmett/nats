@@ -1,6 +1,6 @@
 name:          nats
 category:      Numeric, Algebra
-version:       1
+version:       1.1
 license:       BSD3
 cabal-version: >= 1.10
 license-file:  LICENSE
@@ -31,7 +31,27 @@ flag hashable
     .
     Disabling this is an unsupported configuration, but it may be useful for accelerating builds in sandboxes for expert users.
     .
-    If disabled we will not supply an instance of `Hashable`
+    If disabled we will not supply an instance of `Hashable`.
+  default: True
+  manual: True
+
+flag binary
+  description:
+    You can disable the use of the `binary` package using `-f-binary`.
+    .
+    Disabling this is an unsupported configuration, but it may be useful for accelerating builds in sandboxes for expert users.
+    .
+    If disabled we will not supply an instance of `Binary`.
+  default: True
+  manual: True
+
+flag template-haskell
+  description:
+    You can disable the use of the `template-haskell` package using `-f-template-haskell`.
+    .
+    Disabling this is an unsupported configuration, but it may be useful for accelerating builds in sandboxes for expert users.
+    .
+    If disabled we will not supply an instance of `Lift`.
   default: True
   manual: True
 
@@ -41,14 +61,20 @@ library
     -- {-# LANGUAGE DeriveDataTypeable #-} is only understood starting w/ GHC-7.0
     default-extensions: DeriveDataTypeable
 
-  if !impl(ghc>=7.9)
+  if impl(ghc<7.9)
     -- Starting with GHC 7.10/base-4.8, "Numeric.Natural" lives in `base`
     hs-source-dirs: src
     exposed-modules: Numeric.Natural
     ghc-options: -Wall
+
     -- the needlessly relaxed bound here is to due to stack shenanigans
-    build-depends: base             >= 2   && < 5,
-                   binary           >= 0.2 && < 0.8,
-                   template-haskell >= 2.2 && < 2.12
+    build-depends: base >= 2 && < 5
+
+    if flag(binary)
+      build-depends: binary >= 0.2 && < 0.8
+
+    if flag(template-haskell)
+      build-depends: template-haskell >= 2.2 && < 2.12
+
     if flag(hashable)
       build-depends: hashable >= 1.1 && < 1.3

@@ -9,8 +9,12 @@
 #define MIN_VERSION_base(x,y,z) 1
 #endif
 
-#if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 702
+#if __GLASGOW_HASKELL__ >= 702
+#if defined(MIN_VERSION_hashable) || defined(MIN_VERSION_template_haskell)
 {-# LANGUAGE Trustworthy #-}
+#else
+{-# LANGUAGE Safe #-}
+#endif
 #endif
 
 -----------------------------------------------------------------------------
@@ -31,18 +35,29 @@
 module Numeric.Natural ( Natural ) where
 
 import Control.Exception ( throw, ArithException(Underflow) )
+
+#ifdef MIN_VERSION_binary
 import Control.Monad (liftM)
 import Data.Binary (Binary(..), Get, Word8, Word64, putWord8)
+#endif
+
 import Data.Bits
 import Data.Ix
+
 #ifdef LANGUAGE_DeriveDataTypeable
 import Data.Data
 #endif
+
 #ifdef MIN_VERSION_hashable
 import Data.Hashable
 #endif
+
 import Data.List (unfoldr)
+
+#ifdef MIN_VERSION_template_haskell
 import Language.Haskell.TH.Syntax (Lift(..), Exp(LitE), Lit(IntegerL))
+#endif
+
 #if MIN_VERSION_base(4,7,0) && !(MIN_VERSION_base(4,8,0))
 import Text.Printf (PrintfArg(..), formatInteger)
 #endif
@@ -81,7 +96,7 @@ naturalType = mkIntType "Numeric.Natural.Natural"
 instance Data Natural where
   toConstr x = mkIntegralConstr naturalType x
   gunfold _ z c = case constrRep c of
-                    (IntConstr x) -> z (fromIntegral x)
+                    IntConstr x -> z (fromIntegral x)
                     _ -> error $ "Data.Data.gunfold: Constructor " ++ show c
                                  ++ " is not of type Natural"
   dataTypeOf _ = naturalType
@@ -134,7 +149,7 @@ instance Bits Natural where
   {-# INLINE complementBit #-}
   testBit = testBit . runNatural
   {-# INLINE testBit #-}
-#if defined(__GLASGOW_HASKELL__) && __GLASGOW_HASKELL__ >= 707
+#if __GLASGOW_HASKELL__ >= 707
   bitSizeMaybe _ = Nothing
   {-# INLINE bitSizeMaybe #-}
 #endif
@@ -216,6 +231,7 @@ instance PrintfArg Natural where
   parseFormat _ = parseFormat (undefined :: Integer)
 #endif
 
+#ifdef MIN_VERSION_binary
 --
 -- Fold and unfold an Integer to and from a list of its bytes
 --
@@ -252,6 +268,9 @@ instance Binary Natural where
             0 -> liftM fromIntegral (get :: Get NaturalWord)
             _ -> do bytes <- get
                     return $! roll bytes
+#endif
 
+#ifdef MIN_VERSION_template_haskell
 instance Lift Natural where
     lift x = return (LitE (IntegerL (fromIntegral x)))
+#endif

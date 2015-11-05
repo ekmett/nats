@@ -1,3 +1,7 @@
+1.1
+---
+* Backported `Lift` instances.
+
 1.0
 ---
 * Make `nats` a compat-package since `Numeric.Natural` moved to `base-4.8.0.0`.
