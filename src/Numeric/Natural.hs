@@ -39,6 +39,7 @@ import Control.Exception ( throw, ArithException(Underflow) )
 #ifdef MIN_VERSION_binary
 import Control.Monad (liftM)
 import Data.Binary (Binary(..), Get, Word8, Word64, putWord8)
+import Data.List (unfoldr)
 #endif
 
 import Data.Bits
@@ -51,8 +52,6 @@ import Data.Data
 #ifdef MIN_VERSION_hashable
 import Data.Hashable
 #endif
-
-import Data.List (unfoldr)
 
 #ifdef MIN_VERSION_template_haskell
 import Language.Haskell.TH.Syntax (Lift(..), Exp(LitE), Lit(IntegerL))
