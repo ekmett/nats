@@ -71,7 +71,7 @@ library
     build-depends: base >= 2 && < 5
 
     if flag(binary)
-      build-depends: binary >= 0.2 && < 0.8
+      build-depends: binary >= 0.2 && < 0.9
 
     if flag(template-haskell)
       build-depends: template-haskell >= 2.2 && < 2.12

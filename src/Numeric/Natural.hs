@@ -39,7 +39,7 @@ import Control.Exception ( throw, ArithException(Underflow) )
 #ifdef MIN_VERSION_binary
 import Control.Monad (liftM)
 import Data.Binary (Binary(..), Get, Word8, Word64, putWord8)
-import Data.List (unfoldr)
+import Data.List (foldl', unfoldr)
 #endif
 
 import Data.Bits
@@ -234,16 +234,16 @@ instance PrintfArg Natural where
 --
 -- Fold and unfold an Integer to and from a list of its bytes
 --
-unroll :: (Integral a, Num a, Bits a) => a -> [Word8]
+unroll :: (Integral a, Bits a) => a -> [Word8]
 unroll = unfoldr step
   where
     step 0 = Nothing
     step i = Just (fromIntegral i, i `shiftR` 8)
 
-roll :: (Integral a, Num a, Bits a) => [Word8] -> a
-roll   = foldr unstep 0
+roll :: (Integral a, Bits a) => [Word8] -> a
+roll   = foldl' unstep 0 . reverse
   where
-    unstep b a = a `shiftL` 8 .|. fromIntegral b
+    unstep a b = a `shiftL` 8 .|. fromIntegral b
 
 -- Fixed-size type for a subset of Natural
 type NaturalWord = Word64
