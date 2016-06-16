@@ -1,3 +1,8 @@
+1.1.1
+-----
+* Backported a more efficient `Binary` instance for `Nat`
+* Allow `binary-0.8`
+
 1.1
 ---
 * Backported `Lift` instances.
