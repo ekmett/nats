@@ -11,8 +11,17 @@ homepage:      http://github.com/ekmett/nats/
 bug-reports:   http://github.com/ekmett/nats/issues
 copyright:     Copyright (C) 2011-2014 Edward A. Kmett
 synopsis:      Natural numbers
-description:   Natural numbers
+description:   Natural numbers.
 build-type:    Simple
+tested-with:   GHC == 7.0.4
+             , GHC == 7.2.2
+             , GHC == 7.4.2
+             , GHC == 7.6.3
+             , GHC == 7.8.4
+             , GHC == 7.10.3
+             , GHC == 8.0.2
+             , GHC == 8.2.2
+             , GHC == 8.4.1
 extra-source-files:
   .ghci
   .gitignore
