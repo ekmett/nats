@@ -1,3 +1,7 @@
+1.1.2 [2018-02-06]
+------------------
+* Don't enable `Safe` on GHC 7.2.
+
 1.1.1
 -----
 * Backported a more efficient `Binary` instance for `Nat`
