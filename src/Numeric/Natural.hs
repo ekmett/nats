@@ -10,7 +10,8 @@
 #endif
 
 #if __GLASGOW_HASKELL__ >= 702
-#if defined(MIN_VERSION_hashable) || defined(MIN_VERSION_template_haskell)
+#if defined(MIN_VERSION_hashable) || defined(MIN_VERSION_template_haskell) \
+                                  || __GLASGOW_HASKELL__ == 702
 {-# LANGUAGE Trustworthy #-}
 #else
 {-# LANGUAGE Safe #-}
