@@ -1,0 +1,20 @@
+constraint-set no-binary
+  constraints: nats -binary
+
+constraint-set no-hashable
+  constraints: nats -hashable
+
+constraint-set no-template-haskell
+  constraints: nats -template-haskell
+
+constraint-set no-binary-no-hashable
+  constraints: nats -binary, nats -hashable
+
+constraint-set no-binary-no-template-haskell
+  constraints: nats -binary, nats -template-haskell
+
+constraint-set no-hashable-no-template-haskell
+  constraints: nats -hashable, nats -template-haskell
+
+constraint-set no-binary-no-hashable-no-template-haskell
+  constraints: nats -binary, nats -hashable, nats -template-haskell
