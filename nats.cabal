@@ -88,4 +88,4 @@ library
       build-depends: template-haskell >= 2.2 && < 2.15
 
     if flag(hashable)
-      build-depends: hashable >= 1.1 && < 1.4
+      build-depends: hashable >= 1.1.2.0 && < 1.4
