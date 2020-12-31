@@ -2,7 +2,7 @@ nats
 ====
 
 [![Hackage](https://img.shields.io/hackage/v/nats.svg)](https://hackage.haskell.org/package/nats)
-[![Build Status](https://secure.travis-ci.org/ekmett/nats.svg?branch=master)](http://travis-ci.org/ekmett/nats)
+[![Build Status](https://github.com/ekmett/nats/workflows/Haskell-CI/badge.svg)](https://github.com/ekmett/nats/actions?query=workflow%3AHaskell-CI)
 
 Haskell 98 natural numbers
 
